@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>abc</title>
+    <link href="./public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./public/elementui2.0.7/theme-chalk/index.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app">
+	
+	<el-dialog title="123" :visible.sync="dialogVisible" width="720px" center @open="show">
+		
+		<el-container style="margin: 10px 20px 0;border: 1px solid #d8dbe5;height: 450px;">
+			<el-main style="padding-top: 0;">
+				<el-table ref="table" :data="items" style="width: 100%" @selection-change="selectionChange">
+					<el-table-column prop="name" label="全选"></el-table-column>
+					<el-table-column type="selection" width="55" align="center"></el-table-column>
+				</el-table>
+			</el-main>
+		</el-container>
+
+		<span slot="footer" class="dialog-footer">
+			<el-button type="primary" @click="closeDialog">确 定</el-button>
+		</span>
+	</el-dialog>
+		
+	<el-button type="primary" @click="openDialog">按钮</el-button>
+</div>
+
+
+
+<script src="./public/js/jquery-1.11.1.min.js"></script>
+<script src="./public/js/bootstrap.min.js"></script>
+<script src="./public/js/vue.js"></script>
+<script src="./public/elementui2.0.7/index.js"></script>
+
+<script type="text/javascript">
+    var vue = new Vue({
+	  el: '#app',
+	  data: {
+		dialogVisible: false,
+		selectedItems:[],   //中转
+		items: [],
+		actualItems:[]      //实际存放
+	  },
+	  methods:{
+		openDialog: function(){
+			
+			this.items = [{
+				id: 1,
+				name: '张三'
+			},{
+				id: 2,
+				name: '李四'
+			},{
+				id: 3,
+				name: '王五'
+			}];
+			this.dialogVisible = true;
+			
+		},
+		show: function(){
+		
+			this.$nextTick(function(){
+				vue.actualItems.forEach(function(row){
+					vue.$refs.table.toggleRowSelection(row, true);
+				});
+			});
+			
+		},
+		closeDialog: function(){
+			this.dialogVisible = false;
+			
+			this.actualItems = [].concat(this.selectedItems);
+			
+			this.selectedItems = [];
+			this.items = [];
+			
+		},
+		selectionChange: function(newArr){
+			this.selectedItems = newArr;
+		}
+	  }
+	})
+</script>
+
+</body>
+</html>
